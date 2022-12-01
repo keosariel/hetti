@@ -1,4 +1,4 @@
-from brownie import accounts, config, Hetti
+from brownie import accounts, config, Hetti, ZkWERC20
 from .experiments.stealth_address import get_stealth_address
 
 def deploy():
