@@ -15,7 +15,6 @@ library Perdeson {
         if(_r == 0) {
             _r = random(G-1);
         }
-
         c = (_r * G)+ (_v * H);
         r = _r;
     }
@@ -24,9 +23,8 @@ library Perdeson {
         uint r = 0;
 
         for(uint i = 0; i < _commitments.length;) {
-            (uint c, uint _r) = abi.decode(_commitments[i], (uint, uint));
+            (,uint _r) = abi.decode(_commitments[i], (uint, uint));
             r -= _r;
-
             unchecked {
                 i++;
             }

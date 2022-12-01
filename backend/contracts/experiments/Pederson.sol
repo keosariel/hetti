@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.5;
 
-library Perderson {
+library ExPerderson {
 
     // TODO: use a large prime number
     uint public constant P = 19;
