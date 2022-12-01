@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: AGPL-3.0-only
 
 pragma solidity ^0.8.5;
 
@@ -19,17 +19,20 @@ library Perdeson {
         r = _r;
     }
 
-    function verifyZero(bytes[] calldata _commitments) public view returns (uint, uint) {
+    function verifyZero(bytes[] calldata _commitments) public view returns (bool) {
+        uint c = 0;
         uint r = 0;
 
         for(uint i = 0; i < _commitments.length;) {
-            (,uint _r) = abi.decode(_commitments[i], (uint, uint));
+            (uint _c,uint _r) = abi.decode(_commitments[i], (uint, uint));
             r -= _r;
+            c -= _c;
             unchecked {
                 i++;
             }
         }
 
-        return commit(0, r);
+        (uint c0, ) = commit(0, r);
+        return c == c0;
     }
 }
