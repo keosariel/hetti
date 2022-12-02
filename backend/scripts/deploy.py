@@ -1,8 +1,9 @@
 from brownie import accounts, config, Hetti, ZkWERC20
 from .experiments.stealth_address import get_stealth_address
+from . import get_account
 
 def deploy():
-	account = accounts.add(config["wallets"]["from_key"])
+	account = get_account()
 	
 	# hetti = Hetti.deploy({"from": accounts[0]})
 

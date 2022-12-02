@@ -6,8 +6,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./EllipticCurve.sol";
 import "./Pederson.sol";
 
-
-
 contract ZkWERC20 {
 
     // Events
@@ -26,6 +24,7 @@ contract ZkWERC20 {
     mapping (address => bytes) public balanceOf;
     mapping (address => mapping (address => bytes))  public  allowance; 
     
+    uint public balance;
 
     constructor(address _erc20Address) {
         erc20Address = _erc20Address;
@@ -42,8 +41,9 @@ contract ZkWERC20 {
     function deposit(uint256 _amount) public {
         ERC20(erc20Address).transferFrom(msg.sender, address(this), _amount);
 
-        (uint c, uint r) = Perdeson.commit(_amount, 0);
-        balanceOf[msg.sender] = abi.encode(c,r);
+        (int c, int r) = Pederson.commit(int(_amount), 0);
+        balanceOf[msg.sender] = encodeCommitment(c,r);
+        balance += _amount;
 
         emit Deposit(msg.sender, _amount);
     }
@@ -53,9 +53,16 @@ contract ZkWERC20 {
     // @param _dst The address to transfer to
     // @param c1 the commitment of the amount to transfer
     // @param c2 the commitment of the new balance
-    function transfer(address _dst, bytes calldata c1, bytes calldata c2) public {
-        (uint c, uint r) = abi.decode(data, (uint, uint));
-        bool verified = Perdeson.verifyZero([c, c1, c2]);
+    function transfer(address _dst, bytes calldata c1, bytes calldata c2) public returns (bool) {
+        bytes memory c = balanceOf[msg.sender];
+        require(c.length > 0, "ZkWERC20: INSUFFICIENT");
+
+        bytes[] memory proof = new bytes[](3);
+        proof[0] = c;
+        proof[1] = c1;
+        proof[2] = c2;
+
+        bool verified = Pederson.verifyZero(proof);
 
         // Confirm that the commitment is correct
         require(verified, "INVALID_COMMITMENT");
@@ -64,19 +71,38 @@ contract ZkWERC20 {
         balanceOf[msg.sender] = c2;
         
         // Update the receiver balance
-        if(balanceOf[_dst] == bytes(0)) {
+        if(balanceOf[_dst].length > 0) {
             balanceOf[_dst] = c1;
         }else{
-            (uint d_pc, uint d_pr) = abi.decode(balanceOf[_dst], (uint, uint));
-            (uint d_ac, uint d_ar) = abi.decode(c1, (uint, uint));
+            (int d_pc, int d_pr) = decodeCommitment(balanceOf[_dst]);
+            (int d_ac, int d_ar) = decodeCommitment(c1);
 
             balanceOf[_dst] = abi.encode(d_pc + d_ac, d_pr + d_ar);
         }
         
 
         emit Transfer(msg.sender, _dst, c1);
+        return true;
     }
 
+    function totalSupply() public view returns (uint) {
+        return balance;
+    }
+
+    function encodeCommitment(int c, int r) public view returns (bytes memory) {
+        return abi.encode(c, r);
+    }
+
+    function decodeCommitment(bytes memory c) public view returns (int, int) {
+        if(c.length == 0) {
+            return (0,0);
+        }
+        return abi.decode(c, (int, int));
+    }
+
+    function C(int v, int r) external view returns (int, int) {
+        return Pederson.commit(v, r);
+    }
 
     // Secp256k1 Elliptic Curve
     uint256 public constant GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
