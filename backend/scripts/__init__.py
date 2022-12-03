@@ -1,5 +1,5 @@
-# from brownie import accounts, config
+from brownie import accounts, config
 
-# def get_account():
-#     account = accounts.add(config["wallets"]["from_key"])
-#     return account
+def get_account():
+    account = accounts.add(config["wallets"]["from_key"])
+    return account

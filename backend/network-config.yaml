@@ -1,0 +1,8 @@
+live:
+- name: Polygon
+  networks:
+  - chainid: 80001
+    explorer: https://mumbai.polygonscan.com/
+    host: https://polygon-mumbai.g.alchemy.com/v2/$WEB3_ALCHEMY_PROJECT_ID
+    id: polygon-testnet-a
+    name: Mumbai Testnet (alchemy)

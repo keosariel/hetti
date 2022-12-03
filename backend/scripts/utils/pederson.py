@@ -12,6 +12,9 @@ def C(v, r=None):
 def verify(c, r, v):
     return (G * r) + (H * v) == c
 
+def V(c, r):
+    return (c - (G * r)) // H
+
 if __name__ == "__main__":
     v1 = 30
     v2 = 1
