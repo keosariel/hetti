@@ -1,0 +1,137 @@
+* {
+    box-sizing: border-box;
+    outline: none;
+}
+
+body {
+    background: #212529;
+    --dark: #212529;
+}
+
+html, body, pre, code, kbd, samp {
+    font-family: "Press Start 2P";
+}
+
+.body-content {
+    max-width: 700px;
+    margin: 20px auto;
+}
+
+.header {
+    border-bottom: 3px solid #fff;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.header-content {
+    max-width: 1100px;
+    margin: 10px auto;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-msg {
+    width: 100%;
+}
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.center-self {
+    margin: 0 auto;
+}
+
+.swap {
+    max-width: 600px;
+    margin-top: 80px!important;
+}
+
+.swap > div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.swap > div:last-child {
+    padding: 50px;
+}
+
+.swap > div:first-child > button {
+    padding: 12px 40px;
+    border-bottom: 0;
+    margin-bottom: -8px;
+    z-index: 1000;
+    background: transparent!important;
+    color: #fff;
+    border-image-slice: 3;
+    border-image-width: 3;
+    border-image-source: url(data:image/svg+xml;utf8,<?xml%20version=%221.0%22%20encoding=%22UTF-8%22%20?%3E%3Csvg%20version=%221.1%22%20width=%228%22%20height=%228%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M3%201%20h1%20v1%20h-1%20z%20M4%201%20h1%20v1%20h-1%20z%20M2%202%20h1%20v1%20h-1%20z%20M5%202%20h1%20v1%20h-1%20z%20M1%203%20h1%20v1%20h-1%20z%20M6%203%20h1%20v1%20h-1%20z%20M1%204%20h1%20v1%20h-1%20z%20M6%204%20h1%20v1%20h-1%20z%20M2%205%20h1%20v1%20h-1%20z%20M5%205%20h1%20v1%20h-1%20z%20M3%206%20h1%20v1%20h-1%20z%20M4%206%20h1%20v1%20h-1%20z%22%20fill=%22rgb%28255,255,255%29%22%20/%3E%3C/svg%3E);
+}
+
+.swap > div:first-child > button.current {
+    background: rgb(61, 214, 6) !important;
+    color: var(--dark);
+}
+
+.swap > div:first-child > button:last-child{
+    margin-right: 20px;
+}
+
+.swap > div:first-child > button:first-child{
+    margin-left: 20px;
+}
+
+.swap > div:first-child > button:after,
+.nes-btn.is-success:after {
+    display: none;
+}
+
+.swap .default-amounts {
+    margin-top: 40px;
+}
+
+.swap .default-amounts > p{
+    margin-bottom: 15px;
+}
+
+.swap .default-amounts .amounts {
+    display: grid;
+    grid-template-columns: 33.33fr 33.33fr 33.33fr;
+    grid-gap: 10px;
+}
+
+.swap .default-amounts .amounts:not(:first-child) {
+    margin-top: 30px;
+}
+
+.swap .default-amounts .amounts a span {
+    color: #212529!important;
+    padding: 10px;
+    background-color: rgb(61, 214, 6)!important;
+    box-shadow: 0 0.4em #fff, 0 -0.4em #fff, 0.4em 0 #fff, -0.4em 0 #fff;
+}
+
+label {
+    margin-bottom: 15px;
+}
+
+.swap .status {
+    margin-top: 40px;
+}
+
+.nes-btn.is-success{
+    border-image-slice: 3;
+    border-image-width: 3;
+    border-image-source: url(data:image/svg+xml;utf8,<?xml%20version=%221.0%22%20encoding=%22UTF-8%22%20?%3E%3Csvg%20version=%221.1%22%20width=%228%22%20height=%228%22%20xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d=%22M3%201%20h1%20v1%20h-1%20z%20M4%201%20h1%20v1%20h-1%20z%20M2%202%20h1%20v1%20h-1%20z%20M5%202%20h1%20v1%20h-1%20z%20M1%203%20h1%20v1%20h-1%20z%20M6%203%20h1%20v1%20h-1%20z%20M1%204%20h1%20v1%20h-1%20z%20M6%204%20h1%20v1%20h-1%20z%20M2%205%20h1%20v1%20h-1%20z%20M5%205%20h1%20v1%20h-1%20z%20M3%206%20h1%20v1%20h-1%20z%20M4%206%20h1%20v1%20h-1%20z%22%20fill=%22rgb%28255,255,255%29%22%20/%3E%3C/svg%3E);
+    width: 100%;
+    background: rgb(61, 214, 6) !important;
+    color: var(--dark);
+}
+
+.nes-badge {
+    width: auto;
+}
