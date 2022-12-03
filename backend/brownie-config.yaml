@@ -7,8 +7,3 @@ compiler:
   solc: 
     remappings:
       - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.8.0'
-
-network:
-    networks:
-        polygon-test-a:
-            host: https://polygon-mumbai.g.alchemy.com/v2/$WEB3_ALCHEMY_PROJECT_ID
