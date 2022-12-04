@@ -1,16 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import contracts from '../gateway';
 import { ethers } from "ethers";
 import { serialize, h1, bn128 } from '../lib/AltBn128';
 import crypto from 'crypto';
 
-const Deposit = ({ hettiFactory, setMsg, tokenRef }) => {
+const Deposit = ({ hettiFactory, setMsg, tokenRef, setMintToken }) => {
 
     const [tokens, setTokens] = useState([]);
     const [amount, setAmount] = useState(1);
     const [token, setToken] = useState(null);
     const [hettiToken, setHettiToken] = useState(null);
     const [busy, setBusy] = useState(false);
+
+    const tokSelected = useRef();
 
     if(hettiFactory !== null) {
         hettiFactory.allPoolsLength().then((length) => {
@@ -23,33 +25,73 @@ const Deposit = ({ hettiFactory, setMsg, tokenRef }) => {
                         hettiFactory.signer
                     )
 
-                    pc.token().then((token) => {
+                    pc.token().then((tok) => {
                         var tc = new ethers.Contract(
-                            token,
+                            tok,
                             contracts.ERC20.abi,
                             hettiFactory.signer
                         );
 
                         tc.symbol().then((symbol) => {
-                            var d = {symbol: symbol, address: token, pool: pool};
+                            var d = {symbol: symbol, address: tok, pool: pool, i:tokens.length};
                             for(var i=0; i<tokens.length; i++) {
-                                if(tokens[i].address === token) {
+                                if(tokens[i].address === tok) {
                                     return;
                                 }
                             }
-                            setTokens([...tokens, d]);
-                            if(tokens.length === 0) {
-                                setToken(d);
-                            }else{
-                                setToken(tokens[0]);
-                            }
-                        });
 
+                            if(token === null) {
+                                changeToken();
+                            }
+
+                            setTokens([...tokens, d]);
+                        });
                     });
 
                 });
             }
-        });
+        })
+    }
+
+    const changeToken = () => {
+       var t = tokSelected.current.value;
+       
+       for(var i=0; i<tokens.length; i++) {
+            if(tokens[i].pool === t) {
+                refreshBalance(tokens[i]).then((b) => {
+                    setToken({...tokens[i], balance: b});
+                    setMintToken({...tokens[i], balance: b});
+                });
+                
+                break;
+            }
+        }
+        
+    }
+
+    const refreshBalance = async (tok) => {
+        if(tok !== null) {
+            var tc = new ethers.Contract(
+                tok.address,
+                contracts.ERC20.abi,
+                hettiFactory.signer
+            );
+            
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const account = accounts[0];
+
+            if(account !== undefined) {
+                try {
+                    const b = await tc.balanceOf(account);
+                    const balance = ethers.utils.formatUnits(b, 18);
+                    return balance;
+                } catch (error) {
+                    return 0;
+                }
+            }
+        }
+
+        return 0;
     }
 
     const deposit = async () => {
@@ -106,6 +148,11 @@ const Deposit = ({ hettiFactory, setMsg, tokenRef }) => {
                     tokenRef.current.value = `hetti:${hettiToken.amount}:${hettiToken.ringIndex}:${token.pool}:${hettiToken.randomSecretKey}`;
                     document.getElementById("deposit-dialog").setAttribute("open", "");
                     setMsg({text: "Deposit successful", color: "lightgreen"});
+
+                    const b = await refreshBalance(token)
+                    setToken({...token, balance: b});
+                    setMintToken({...token, balance: b});
+
                 }else{
                     setMsg({text: "Deposit failed", color: "pink"});
                 }
@@ -121,37 +168,47 @@ const Deposit = ({ hettiFactory, setMsg, tokenRef }) => {
         <>
             <label htmlFor="default_select">Token</label>
             <div className="nes-select is-dark">
-                <select required id="default_select">
+                <select required id="default_select" ref={tokSelected} onChange={changeToken}>
                     {tokens.map((token) => {
-                        return <option key={0} value={token.pool}>{token.symbol}</option>
+                        return <option key={token.i} value={token.pool}>{token.symbol}</option>
                     })}
                 </select>
             </div>
-            
+            <br/>
+            { token ? (
+                token.balance ? (
+                    <p>Balance: {token.balance} {token.symbol}</p>
+                    ) : (
+                        <p>Balance: 0 {token.symbol}</p>
+                    )
+                ) : (
+                    <></>
+                )
+            }
             <div className="default-amounts">
                 { token ? (
                     <>
                         <p>Amount</p>
 
                         <div className='amounts'>
-                            <a href="#" className="nes-badge" onClick={() => setAmount(1)}>
+                            <a className="nes-badge" onClick={() => setAmount(1)}>
                                 <span className="is-success">1 {token.symbol}</span>
                             </a>
-                            <a href="#" className="nes-badge" onClick={() => setAmount(2)}>
+                            <a className="nes-badge" onClick={() => setAmount(2)}>
                                 <span className="is-success">2 {token.symbol}</span>
                             </a>
-                            <a href="#" className="nes-badge" onClick={() => setAmount(4)}>
+                            <a className="nes-badge" onClick={() => setAmount(4)}>
                                 <span className="is-success">4 {token.symbol}</span>
                             </a>
                         </div>
                         <div className='amounts'>
-                            <a href="#" className="nes-badge" onClick={() => setAmount(8)}>
+                            <a className="nes-badge" onClick={() => setAmount(8)}>
                                 <span className="is-success">8 {token.symbol}</span>
                             </a>
-                            <a href="#" className="nes-badge" onClick={() => setAmount(16)}>
+                            <a className="nes-badge" onClick={() => setAmount(16)}>
                                 <span className="is-success">16 {token.symbol}</span>
                             </a>
-                            <a href="#" className="nes-badge" onClick={() => setAmount(32)}>
+                            <a className="nes-badge" onClick={() => setAmount(32)}>
                                 <span className="is-success">32 {token.symbol}</span>
                             </a>
                         </div>

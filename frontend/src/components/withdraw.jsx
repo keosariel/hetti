@@ -200,24 +200,24 @@ const Withdraw = ({ hettiFactory, setMsg }) => {
 
     return (
         <>
-            <div class="nes-field">
+            <div className="nes-field">
                 <label htmlFor="token_field">Token</label>
-                <input type="text" id="token_field" ref={tokenRef} class="nes-input is-dark" onChange={getData} placeholder='Paste you token here.'/>
+                <input type="text" id="token_field" ref={tokenRef} className="nes-input is-dark" onChange={getData} placeholder='Paste you token here.'/>
             </div>
             
-            <div class="nes-container with-title is-dark status">
-                <p class="title">Status</p>
+            <div className="nes-container with-title is-dark status">
+                <p className="title">Status</p>
                 {
                     ringData != null ? (
                         ringData.status ? (
                             <div>
-                                <p>Ring status: <span class="nes-text is-success">{ringData.status}</span></p>
-                                <p>No of Participants: <span class="nes-text is-success">{ringData.participants}</span></p>
-                                <p>Ring ID: <span class="nes-text is-success">{ringData.ringId}</span></p>
-                                <p>Amount: <span class="nes-text is-success">{ringData.amount} {ringData.token}</span></p>
+                                <p>Ring status: <span className="nes-text is-success">{ringData.status}</span></p>
+                                <p>No of Participants: <span className="nes-text is-success">{ringData.participants}</span></p>
+                                <p>Ring ID: <span className="nes-text is-success">{ringData.ringId}</span></p>
+                                <p>Amount: <span className="nes-text is-success">{ringData.amount} {ringData.token}</span></p>
                             </div>
                         ) : (
-                            <p class="nes-text">Loading...</p>
+                            <p className="nes-text">Loading...</p>
                         )
                     ) : (
                         <p>input a valid token</p>
@@ -226,9 +226,9 @@ const Withdraw = ({ hettiFactory, setMsg }) => {
             </div>
 
             <br/>
-            <div class="nes-field">
+            <div className="nes-field">
                 <label htmlFor="token_field">Recipient Address</label>
-                <input type="text" id="token_field" ref={recipientRef} class="nes-input is-dark" placeholder='Who would recieve the funds?'/>
+                <input type="text" id="token_field" ref={recipientRef} className="nes-input is-dark" placeholder='Who would recieve the funds?'/>
             </div>
             <br/>
             <br/>

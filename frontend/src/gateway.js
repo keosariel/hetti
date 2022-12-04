@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import HettiFactory from "./abi/HettiFactory.json";
 import HettiPool from "./abi/HettiPool.json";
 import ERC20 from "./abi/ERC20.json";
-
+import MockToken from "./abi/MockToken.json";
 
 const contracts = {
     "hettiFactory": {
@@ -14,6 +14,9 @@ const contracts = {
     },
     "ERC20": {
         "abi": ERC20['abi']
+    },
+    "MockToken": {
+        "abi": MockToken['abi']
     }
 }
 

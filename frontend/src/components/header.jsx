@@ -59,7 +59,7 @@ const Header = ({ setHettiFactory, setMsg, msg }) => {
                     </div>
                     <div>
                         {/* <a href="https://github.com/keosariel" target="_blank">
-                            <i class="nes-icon github is-large" style={{"box-shadow": "0 0.1em #fff, 0 -0.1em #fff, 0.1em 0 #fff, -0.1em 0 #fff"}}></i>
+                            <i className="nes-icon github is-large" style={{"box-shadow": "0 0.1em #fff, 0 -0.1em #fff, 0.1em 0 #fff, -0.1em 0 #fff"}}></i>
                         </a> */}
                         {user.address === "" ?
                             <button type="button" className="nes-btn is-success" onClick={connectWallet}>

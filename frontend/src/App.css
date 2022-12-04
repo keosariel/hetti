@@ -16,7 +16,7 @@ html, body, pre, code, kbd, samp {
 .body-content {
     max-width: 700px;
     margin: 20px auto;
-    min-height: 75vh;
+    min-height: 60vh;
 }
 
 .header {
