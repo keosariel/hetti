@@ -5,6 +5,7 @@ pragma solidity ^0.8.5;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "./lib/AltBn128.sol";
 import "./lib/LSAG.sol";
+import "./interfaces/IFlashBorrower";
 
 
 contract HettiPool {
@@ -65,6 +66,7 @@ contract HettiPool {
     address public token;
     uint256 public tokenDecimals;
     uint256 public balance;
+    uint256 public loanFee = 9; // 0.09%
 
     uint256[10] allowedAmounts;
 
@@ -252,6 +254,43 @@ contract HettiPool {
 
     function getPoolBalance() public view returns (uint256) {
         return ERC20(token).balanceOf(address(this));
+    }
+
+    // =============================================================
+    //                           FLASH LOAN
+    // =============================================================
+
+    // @notice Request a flash loan
+	// @param receiver The contract that will receive the flash loan
+	// @param token The ERC20 token you want to borrow
+	// @param amount The amount of tokens you want to borrow
+	// @param data Data to forward to the receiver contract along with your flash loan
+	// @dev Make sure your contract implements the FlashBorrower interface!
+	function execute(
+		FlashBorrower receiver,
+		uint256 amount,
+		bytes calldata data
+	) public payable {
+        uint256 poolBalance = getPoolBalance();
+
+        if(poolBalance < amount) {
+            revert("INSUFFICIENT_FUNDS");
+        }
+
+		emit Flashloaned(receiver, token, amount);
+
+        uint256 fee = getLoanFee(amount);
+
+		ERC20(token).transfer(address(receiver), amount);
+		receiver.onFlashLoan(amount, fee, data);
+
+		if (poolBalance + fee > ERC20(token).balanceOf(address(this))){
+            revert("TOKENS_NOT_RETURNED");
+        }
+	}
+
+    function getLoanFee(uint amount) returns (uint) {
+        return (amount * loanFee) / 10000;
     }
 
     // =============================================================
