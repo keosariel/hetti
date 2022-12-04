@@ -156,6 +156,9 @@ contract HettiPool {
         (uint wParticipants,
         uint participants, uint blockNum) = getRingPackedData(ring.packedRingData);
 
+        if (recipient == address(0)) {
+            revert("ZERO_ADDRESS");
+        }
         
         if (wParticipants >= MAX_RING_PARTICIPANT) {
             revert("ALL_FUNDS_WITHDRAWN");
@@ -176,7 +179,7 @@ contract HettiPool {
 
         // Attempts to verify ring signature
         bool signatureVerified = LSAG.verify(
-            abi.encodePacked(ring.ringHash), // Convert to bytes
+            abi.encodePacked(ring.ringHash, recipient), // Convert to bytes
             c0,
             keyImage,
             s,

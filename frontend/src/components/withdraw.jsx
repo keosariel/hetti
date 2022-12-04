@@ -140,13 +140,15 @@ const Withdraw = ({ hettiFactory, setMsg }) => {
             return;
         }
 
-        const ringHashBuffer = Buffer.from(
-            withdrawData.ringHash.slice(2), // Remove the '0x'
-            'hex'
-        )
-
         const message = Buffer.concat([
-            ringHashBuffer
+            Buffer.from(
+                withdrawData.ringHash.slice(2), // Remove the '0x'
+                'hex'
+            ),
+            Buffer.from(
+                recipient.slice(2), // Remove the '0x'
+                'hex'
+            )
         ]);
 
         const signature = bn128.ringSign(
@@ -196,9 +198,6 @@ const Withdraw = ({ hettiFactory, setMsg }) => {
         setBusy(false);
     }
 
-    // hetti:0x0de0b6b3a7640000:0x00:0x5CcdCC3cEd733C6886b06c8FcaF1E99F0f6e01E8:13558167602337309533195820349195328710742092319146381132772802062819691567882
-
-    // hetti:0x0de0b6b3a7640000:0x00:0x5CcdCC3cEd733C6886b06c8FcaF1E99F0f6e01E8:5983718167251287494888287351611942182545005396132619442145969121787986345471
     return (
         <>
             <div class="nes-field">
