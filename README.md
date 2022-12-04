@@ -1,6 +1,8 @@
 # Hetti
 ### An ERC20 mixer and flash loan protocol
 
+![hetti banner](hetti.png)
+
 One of the biggest issues on a public blockchain like polygon is the lack of privacy. Because all transactions on the blockchain are public, it is possible for anyone to see the details of any transaction, including the sender, receiver, and amount involved. This lack of privacy can be a problem for users who want to keep their financial transactions private.
 
 There are also privacy concerns related to the use of Polygon-based tokens (ERC20, ERC721 e.t.c). Many tokens are built on top of the Polygon platform, and these tokens can be used to represent a wide range of assets, including financial instruments, physical assets, and even voting rights. However, because these tokens are built on the blockchain, their transactions are publicly visible, which can raise privacy concerns for users who want to keep their token transactions private. Overall, this can be a significant issue for users who value their privacy (i.e [me](https://twitter.com/keosariel)). 
