@@ -9,6 +9,7 @@ interface FlashBorrower {
 	/// @dev Called after receiving the requested flash loan, should return tokens + any fees before the end of the transaction
 	function onFlashLoan(
 		uint256 amount,
+		uint256 fee,
 		bytes calldata data
 	) external;
 }

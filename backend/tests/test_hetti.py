@@ -25,47 +25,47 @@ def pre_deploy():
     return wrapper
 
 
-# @pre_deploy()
-# def test_factory(account, hetti_factory, mock_token, **kwargs):
-#     # Create Hetti Pool
-#     tx = hetti_factory.createPool(mock_token, {"from": account})
-#     tx.wait(1)
+@pre_deploy()
+def test_factory(account, hetti_factory, mock_token, **kwargs):
+    # Create Hetti Pool
+    tx = hetti_factory.createPool(mock_token, {"from": account})
+    tx.wait(1)
 
-#     # Get Hetti Pool address
-#     pool_address = tx.events["PoolCreated"]["poolAddress"]
+    # Get Hetti Pool address
+    pool_address = tx.events["PoolCreated"]["poolAddress"]
 
-#     assert pool_address != "0x0000000000000000000000000000000000000000"
-#     assert hetti_factory.allPools(0) == pool_address
-#     assert hetti_factory.pools(mock_token) == pool_address
+    assert pool_address != "0x0000000000000000000000000000000000000000"
+    assert hetti_factory.allPools(0) == pool_address
+    assert hetti_factory.pools(mock_token) == pool_address
     
 
-# @pre_deploy()
-# def test_deposit(account, hetti_factory, mock_token, **kwargs):
-#     # Create Hetti Pool
-#     tx = hetti_factory.createPool(mock_token, {"from": account})
-#     tx.wait(1)
+@pre_deploy()
+def test_deposit(account, hetti_factory, mock_token, **kwargs):
+    # Create Hetti Pool
+    tx = hetti_factory.createPool(mock_token, {"from": account})
+    tx.wait(1)
 
-#     # Get Hetti Pool address
-#     pool_address = tx.events["PoolCreated"]["poolAddress"]
+    # Get Hetti Pool address
+    pool_address = tx.events["PoolCreated"]["poolAddress"]
 
-#     # Get Hetti Pool
-#     pool = HettiPool.at(pool_address)
+    # Get Hetti Pool
+    pool = HettiPool.at(pool_address)
 
-#     amount = Wei("2 ether")
+    amount = Wei("2 ether")
 
-#     # Approve Hetti Pool
-#     mock_token.approve(pool_address, amount, {"from": account})
+    # Approve Hetti Pool
+    mock_token.approve(pool_address, amount, {"from": account})
 
-#     sk = random_private_key()
-#     pk = ecMul(G, sk)
+    sk = random_private_key()
+    pk = ecMul(G, sk)
 
-#     # Deposit tokens
-#     tk = pool.deposit(amount, pk, {"from": account})
-#     tk.wait(1)
+    # Deposit tokens
+    tk = pool.deposit(amount, pk, {"from": account})
+    tk.wait(1)
 
-#     pool_balance = pool.getPoolBalance({"from": account})
+    pool_balance = pool.getPoolBalance({"from": account})
 
-#     assert pool_balance == amount
+    assert pool_balance == amount
 
 
 @pre_deploy()
@@ -83,7 +83,7 @@ def test_withdraw(account, hetti_factory, mock_token, **kwargs):
     # Get Hetti Pool
     pool = HettiPool.at(pool_address)
 
-    num_participants = 5
+    num_participants = pool.getRingMaxParticipants({"from": account})
     secret_keys = [random_private_key() for i in range(num_participants)]
     public_keys = [ecMul(G, s) for s in secret_keys]
 
