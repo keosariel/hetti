@@ -40,7 +40,7 @@ const Home = () => {
                     let tx = await Token.mint(
                         account, 
                         ethers.utils.parseUnits(amount.toString(), 18).toHexString(),
-                        { gasLimit: gasEstimate + 10000 }
+                        { gasLimit: (parseInt(gasEstimate) + 1000).toString() }
                     );
                     
                     let receipt = await tx.wait();
