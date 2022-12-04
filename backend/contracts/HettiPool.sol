@@ -68,10 +68,10 @@ contract HettiPool {
 
     uint256[10] allowedAmounts;
 
-    // allowedAmount => ringIndex
-    mapping(uint256 => uint256) public ringsNo;
+    // tokenAmount => ringIndex
+    mapping(uint256 => uint256) public ringsNumber;
 
-    // allowedAmount => ringIndex => Ring
+    // tokenAmount => ringIndex => Ring
     mapping (uint256 => mapping(uint256 => Ring)) public rings;
 
     /// @notice Initialize the vault to use and accept `token`
@@ -105,7 +105,7 @@ contract HettiPool {
         }
 
         // Gets the current ring for the amounts
-        uint256 ringIndex = ringsNo[amountTokenRecieved];
+        uint256 ringIndex = ringsNumber[amountTokenRecieved];
         Ring storage ring = rings[amountTokenRecieved][ringIndex];
 
         (uint wParticipants,
@@ -142,7 +142,7 @@ contract HettiPool {
             ring.ringHash = hashRing(amountTokenRecieved, ringIndex);
             
             // Add new Ring pool
-            ringsNo[amountTokenRecieved] += 1;
+            ringsNumber[amountTokenRecieved] += 1;
         }
     }
 
@@ -247,7 +247,7 @@ contract HettiPool {
         return rings[receivedToken][_ringIndex].ringHash;
     }
 
-    function getBalance() public view returns (uint256) {
+    function getPoolBalance() public view returns (uint256) {
         return ERC20(token).balanceOf(address(this));
     }
 
@@ -280,15 +280,23 @@ contract HettiPool {
         return _amount;
     }
 
-    function privateToPublic(uint256 sk) public view returns (uint256[2] memory publicKey) {
-        publicKey = AltBn128.ecMulG(sk);
-        require(AltBn128.onCurve(publicKey[0], publicKey[1]), "PK_NOT_ON_CURVE");
+    function getPublicKeys(uint256 amountToken, uint256 index) public view
+        returns (bytes32[2][MAX_RING_PARTICIPANT] memory)
+    {
+        amountCheck(amountToken);
 
-        return publicKey;
+        bytes32[2][MAX_RING_PARTICIPANT] memory publicKeys;
+
+        for (uint i = 0; i < MAX_RING_PARTICIPANT; i++) {
+            publicKeys[i][0] = bytes32(rings[amountToken][index].publicKeys[i][0]);
+            publicKeys[i][1] = bytes32(rings[amountToken][index].publicKeys[i][1]);
+        }
+
+        return publicKeys;
     }
 
-    function getRingPackedData(uint packedData) public view returns (uint, uint, uint){
-        uint p = packedData >> _BITWIDTH_BLOCK_NUM;
+    function getRingPackedData(uint packedData) public view returns (uint256, uint256, uint256){
+        uint256 p = packedData >> _BITWIDTH_BLOCK_NUM;
         
         return (
             p >> _BITWIDTH_PARTICIPANTS,
@@ -297,13 +305,26 @@ contract HettiPool {
         );
     }
 
-    function getWParticipant(uint packedData) internal view returns (uint){
+    function getWParticipant(uint256 packedData) public view returns (uint256){
         return (packedData >> _BITWIDTH_BLOCK_NUM) >> _BITWIDTH_PARTICIPANTS;
     }
 
-    function getParticipant(uint packedData) internal view returns (uint){
-        uint p = packedData >> _BITWIDTH_BLOCK_NUM;
+    function getParticipant(uint256 packedData) public view returns (uint256){
+        uint256 p = packedData >> _BITWIDTH_BLOCK_NUM;
         
         return p & _BITMASK_PARTICIPANTS;
+    }
+
+    function getRingMaxParticipants() public pure
+        returns (uint256)
+    {
+        return MAX_RING_PARTICIPANT;
+    }
+
+    function getCurrentRingIndex(uint256 amountToken) public view
+        returns (uint256)
+    {
+        amountCheck(amountToken);
+        return ringsNumber[amountToken];
     }
 }

@@ -1,4 +1,7 @@
-from brownie import accounts, config, Hetti, AltBn128, LSAG, Wei, history, convert
+from brownie import (
+	AltBn128, 
+    LSAG, HettiFactory, HettiPool
+)
 from . import get_account
 from .utils.ringsignatures import *
 
@@ -8,7 +11,8 @@ def main():
 	# Deploy libraries
 	AltBn128.deploy({"from": account})
 	LSAG.deploy({"from": account})
+	HettiPool.deploy({"from": account})
 
-	# Deploy Hetti
-	hetti = Hetti.deploy({"from": account})
-		
+	# Deploy Factory
+	HettiFactory.deploy(account, {"from": account})
+	

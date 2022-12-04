@@ -63,7 +63,7 @@ def test_deposit(account, hetti_factory, mock_token, **kwargs):
     tk = pool.deposit(amount, pk, {"from": account})
     tk.wait(1)
 
-    pool_balance = mock_token.balanceOf(pool_address)
+    pool_balance = pool.getPoolBalance({"from": account})
 
     assert pool_balance == amount
 
@@ -89,7 +89,7 @@ def test_withdraw(account, hetti_factory, mock_token, **kwargs):
 
     amount = Wei("4 ether")
 
-    current_index = pool.ringsNo(amount)
+    current_index = pool.getCurrentRingIndex(amount)
     assert current_index == 0
 
     for ac, pk in zip(accounts[:5], public_keys):
