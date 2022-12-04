@@ -59,6 +59,7 @@ const Home = () => {
                     color: "pink"
                 });
             }
+            setBusy(false);
         }
 
     };
