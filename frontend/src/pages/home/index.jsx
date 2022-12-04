@@ -37,16 +37,25 @@ const Home = () => {
                 
                 if(account !== undefined) {
                     const gasEstimate = await Token.estimateGas.mint(account, amount);
-                    await Token.mint(
+                    let tx = await Token.mint(
                         account, 
                         ethers.utils.parseUnits(amount.toString(), 18).toHexString(),
                         { gasLimit: gasEstimate }
                     );
                     
-                    setMsg({
-                        text: `Tokens Minted to ${account}`,
-                        color: "lightgreen"
-                    });
+                    let receipt = await tx.wait();
+                    if(receipt.status === 1) {
+                        setMsg({
+                            text: `Tokens Minted to ${account}`,
+                            color: "lightgreen"
+                        });
+                    }else{
+                        setMsg({
+                            text: "Error Minting Token",
+                            color: "pink"
+                        });
+                    }
+                    
                 }else{
                     setMsg({
                         text: "Connect Wallet",
