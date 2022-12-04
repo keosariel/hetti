@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import Deposit from '../../components/deposit';
 import Withdraw from '../../components/withdraw';
 import Header from '../../components/header';
+import Footer from '../../components/footer';
 
 const Home = () => {
     
@@ -48,6 +49,11 @@ const Home = () => {
                                  <Withdraw hettiFactory={ hettiFactory } setMsg={ setMsg }/>}
                 </div>
             </div>
+            <button type="button" class="nes-btn github-btn active">
+                <i class="nes-icon github"></i>
+            </button>
+
+            <Footer />
         </>
     )
 }

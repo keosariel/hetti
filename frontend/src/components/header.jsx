@@ -55,7 +55,7 @@ const Header = ({ setHettiFactory, setMsg, msg }) => {
                 <div className='header-content'>
                     <div>
                         <h2>Hetti</h2>
-                        <p style={{maxWidth:'370px', fontSize: '14px'}}>A polygon Mixer and leding protocol</p>
+                        <p style={{maxWidth:'370px', fontSize: '14px'}}>ERC20 Mixer and Flash Loan protocol</p>
                     </div>
                     <div>
                         {/* <a href="https://github.com/keosariel" target="_blank">
