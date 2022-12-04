@@ -14,3 +14,37 @@ contract MockToken is ERC20{
         _mint(to, amount);
     }
 }
+
+
+contract MMatic is ERC20{
+
+    constructor() ERC20("MockMatic", "MMAT"){
+        _mint(msg.sender,1000*10**18);
+    }
+
+    function mint(address to, uint256 amount) public {
+        _mint(to, amount);
+    }
+}
+
+contract MCrv is ERC20{
+
+    constructor() ERC20("MockCRV", "MCRV"){
+        _mint(msg.sender,1000*10**18);
+    }
+
+    function mint(address to, uint256 amount) public {
+        _mint(to, amount);
+    }
+}
+
+contract MUsdt is ERC20{
+
+    constructor() ERC20("MockUSDT", "MUsdt"){
+        _mint(msg.sender,1000*10**18);
+    }
+
+    function mint(address to, uint256 amount) public {
+        _mint(to, amount);
+    }
+}

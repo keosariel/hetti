@@ -1,6 +1,12 @@
-from brownie import HettiFactory, MockToken, accounts, Wei
+from brownie import (
+    HettiFactory, accounts, Wei,
+    MockToken, MMatic, MCrv, MUsdt
+)
+
 from .import get_account
 import json
+
+mocks = [MockToken, MMatic, MCrv, MUsdt]
 
 with open("./build/deployments/map.json") as f:
     d_map = json.load(f)["80001"]
@@ -11,13 +17,13 @@ def mint_test_tokens(account):
     token = MockToken.at(address)
     token.mint(account, Wei("100 ether"), {"from": account})
 
-def main():
+def deploy_tokens():
     account = get_account()
-
-    mock_token = MockToken.deploy({"from": account})
-
     factory_addr = d_map["HettiFactory"][0]
 
-    HettiFactory.at(factory_addr).createPool(mock_token, {"from": account})
+    for erc20 in mocks:
+        mock_token = erc20.deploy({"from": get_account()})
+        HettiFactory.at(factory_addr).createPool(mock_token, {"from": account})
 
-    # mint_test_tokens(account)
+def main():
+    deploy_tokens()

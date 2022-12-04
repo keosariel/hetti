@@ -7,27 +7,26 @@ import "./interfaces/IHettiPool.sol";
 
 contract HettiFactory {
 
-    // Errors
+    /// Errors
     error PoolExists();
     error ZeroAddress();
     error Forbidden();
 
-    // Events
-    event PoolCreated(
-        address indexed token,
-        address poolAddress
-    );
+    /// Events
+    event PoolCreated(address indexed token, address poolAddress);
 
     address[] public allPools;
     address public manager;
 
+    /// token => pool
     mapping(address => address) public pools;
-
 
     constructor(address _manager) {
         manager = _manager;
     }
 
+    /// @notice Creates a new pool for the given token
+    /// @param token The token to create a pool for
     function createPool(address token) public returns (address vault) {
 
         if (token == address(0)) revert ZeroAddress();
@@ -49,6 +48,7 @@ contract HettiFactory {
         emit PoolCreated(token, vault);
     }
 
+    /// @notice Returns the amount of pools created
     function allPoolsLength() external view returns (uint) {
         return allPools.length;
     }
