@@ -6,7 +6,7 @@ import ERC20 from "./abi/ERC20.json";
 
 const contracts = {
     "hettiFactory": {
-        "address": "0xa1b4f0788D8a7670f619D0Ff40F66D04CA8e20b6",
+        "address": "0x9117Ac25290b70f86365F43CB20D2ffc10e7Ee95",
         "abi": HettiFactory['abi']
     },
     "hettiPool": {
