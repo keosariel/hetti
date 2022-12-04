@@ -1,11 +1,19 @@
 import { ethers } from "ethers";
-import HettiABI from "./abi/Hetti.json";
+import HettiFactory from "./abi/HettiFactory.json";
+import HettiPool from "./abi/HettiPool.json";
+import ERC20 from "./abi/ERC20.json";
 
-const hettiAbi = HettiABI['abi'];
+
 const contracts = {
-    "hetti": {
-        "address": "0x3C31137957159b642dd1e1EdACCFD78ef54f3997",
-        "abi": hettiAbi
+    "hettiFactory": {
+        "address": "0xC5D6AE486f04a54ccf60a4aA5de7a16F34acB889",
+        "abi": HettiFactory['abi']
+    },
+    "hettiPool": {
+        "abi": HettiPool['abi']
+    },
+    "ERC20": {
+        "abi": ERC20['abi']
     }
 }
 

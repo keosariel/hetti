@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import { ethers } from "ethers";
 import contracts from '../gateway';
 
-const Header = ({ setHetti }) => {
+const Header = ({ setHettiFactory, setMsg, msg }) => {
     
     const maticTestnetChainId = 80001;
-    const [msg, setMsg] = useState({
-        text: "Connect Wallet",
-        color: "bisque"
-    });
-
+    
     const [user, setUser] = useState({
         address: "",
         balance: 0
@@ -30,14 +26,14 @@ const Header = ({ setHetti }) => {
                     balance: ethers.utils.formatEther(balance)
                 });
                 
-                if (chainId != maticTestnetChainId) {
+                if (chainId !== maticTestnetChainId) {
                     setMsg({
                         text: "Please connect to Matic Testnet",
                         color: "pink"
                     });
                     return;
                 }
-                setHetti(new ethers.Contract(contracts.hetti.address, contracts.hetti.abi, signer));
+                setHettiFactory(new ethers.Contract(contracts.hettiFactory.address, contracts.hettiFactory.abi, signer));
 
                 setMsg({text: "", color: "bisque"});
             } catch (error) {
@@ -46,11 +42,12 @@ const Header = ({ setHetti }) => {
             }
         } else {
             setMsg({text: "Please install Metamask", color: "pink"});
-            console.log("Install Metamask");
         }
     }
 
-    // connectWallet();
+    if(user.address === "") {
+        connectWallet();
+    }
     
     return (
         <>
@@ -79,7 +76,7 @@ const Header = ({ setHetti }) => {
             </div>
             {msg.text === "" ? null : 
                 <div className="header-msg" style={{background: msg.color}}>
-                    <p style={{fontSize: '11px', textAlign: "center", padding: "4px 0"}}>{msg.text}</p>
+                    <p style={{fontSize: '13px', textAlign: "center", padding: "8px 0"}}>{msg.text}</p>
                 </div>
             }
             
